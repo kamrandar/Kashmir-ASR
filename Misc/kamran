@@ -1,0 +1,23 @@
+    if os.path.isfile('microphone-results.wav'):
+        os.remove('microphone-results.wav')
+    else:
+        r = sr.Recognizer()
+        r.pause_threshold = 0.6
+        r.energy_threshold = 400
+        m = sr.Microphone()
+        with m as source:
+            print("Say something!")
+            mixer.init()
+            mixer.music.load('chime1.mp3')
+            mixer.music.play()
+            try:
+                audio = r.listen(source, timeout=5)
+                mixer.music.load('chime2.mp3')
+                mixer.music.play()
+
+            except sr.WaitTimeoutError as e:
+                print("Timeout; {0}".format(e))
+            else:
+                pass
+        with open("microphone-results.wav", "wb") as f:
+            f.write(audio.get_wav_data())
